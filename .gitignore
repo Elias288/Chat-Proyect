@@ -1,0 +1,7 @@
+Server/node_modules
+
+Server/.DS_Store
+Server/.env.local
+Server/.env.development.local
+Server/.env.test.local
+Server/.env.production.local
