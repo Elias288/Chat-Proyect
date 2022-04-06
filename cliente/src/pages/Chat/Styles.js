@@ -91,3 +91,15 @@ export const MessageForm = styled.form`
         border-bottom-left-radius: 0;
     }
 `
+export const SistemMessage = styled.div`
+    background: #9f9f9f;
+    border-radius: .7rem;
+    padding: .7rem 1.25rem;
+    width: 300px;
+    margin: auto;
+    text-align: center;
+
+    > p {
+        width: 100%;
+    }
+`

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { StyledButton, StyledInputText } from '../../components/Styles'
-import { StyledJoin, JoinForm } from './Styles'
+import { StyledJoin, JoinForm, Lista } from './Styles'
 
 const Join = ({ join, Username, Room }) => {
 	return (
@@ -20,6 +20,14 @@ const Join = ({ join, Username, Room }) => {
 				/>
 				<StyledButton onClick={ join }>Entrar</StyledButton>
 			</JoinForm>
+
+			<Lista>
+				<h3>Cosas por hacer</h3>
+				<ul>
+					<li>listar usuarios en una sala</li>
+					<li>Responder mensajes</li>
+				</ul>
+			</Lista>
 		</StyledJoin>
 	)
 }

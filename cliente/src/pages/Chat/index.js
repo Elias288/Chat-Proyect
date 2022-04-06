@@ -6,6 +6,7 @@ import {
 	MessageBody,
 	Message,
 	MessageContent,
+	SistemMessage,
 } from './Styles'
 import Form from './Form'
 
@@ -33,7 +34,10 @@ const Chat = ({ socket, username, room, setShowChat }) => {
 		}
 	}
 
-	const leaveRoom = () => setShowChat(false)
+	const leaveRoom = () => {
+		socket.emit('leaveRoom')
+		setShowChat(false)
+	}
 	
 	useEffect(() => {
 		console.log(`${username} ${room}`)
@@ -52,7 +56,14 @@ const Chat = ({ socket, username, room, setShowChat }) => {
 						{ messageList.map((messageContent, key) => {
 							return (
 								<Message className={messageContent.author === username ? 'own' : '' } key={key} >
-									<div>
+									{ messageContent.author === 'sistema' ? (
+										<SistemMessage>
+											<p><strong>{ messageContent.message }</strong></p>
+											<div>
+												<p>{ messageContent.time }</p>
+											</div>
+										</SistemMessage>
+									) : (
 										<MessageContent className='message-content'>
 											<p>{ messageContent.message }</p>
 											<div className='message-meta'>
@@ -60,8 +71,7 @@ const Chat = ({ socket, username, room, setShowChat }) => {
 												<p><strong>{ messageContent.author }</strong></p>
 											</div>
 										</MessageContent>
-
-									</div>
+									)}
 								</Message>
 							)
 						})}
