@@ -1,8 +1,12 @@
 import styled from 'styled-components'
 
 export const StyledChat = styled.div`
-	width: 500px;
+	width: 600px;
     margin: auto;
+
+    .Chat {
+        filter: drop-shadow(2px 4px 6px black);
+    }
 `
 export const MessageBody = styled.div`
     background: #fff;
@@ -24,6 +28,8 @@ export const MessageBody = styled.div`
 export const Message = styled.div`
     padding-bottom: 10px;
     display: flex;
+    margin-top: 10px;
+    filter: drop-shadow(2px 4px 6px #585858);
 
     p { margin: 0 }
 
@@ -34,26 +40,27 @@ export const Message = styled.div`
             background: #2fc92c;
         }
     }
-
-    .message-meta {
-        display: flex;
-        flex-direction: row;
-
-        p:first-child {
-            margin-right: 10px;
-        }
-    }
 `
 export const MessageContent = styled.div`
     background: #509fe3;
     border-radius: .7rem;
     padding: .7rem 1.25rem;
 
-    p {
+    > p {
         overflow: hidden;
-        max-width: 150px;
+        max-width: 250px;
+        min-width: 150px;
         font-size: 1.25rem;
         overflow-wrap: break-word;
+    }
+
+    .message-meta {
+        display: flex;
+        flex-direction: row-reverse;
+
+        p:last-child {
+            margin-right: 10px;
+        }
     }
 `
 export const MessageForm = styled.form`
@@ -82,5 +89,17 @@ export const MessageForm = styled.form`
         border-top-left-radius: 0;
         border-top-right-radius: 0;
         border-bottom-left-radius: 0;
+    }
+`
+export const SistemMessage = styled.div`
+    background: #9f9f9f;
+    border-radius: .7rem;
+    padding: .7rem 1.25rem;
+    width: 300px;
+    margin: auto;
+    text-align: center;
+
+    > p {
+        width: 100%;
     }
 `

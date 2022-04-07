@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import ScrollToBottom from 'react-scroll-to-bottom'
 
 import {
@@ -6,16 +6,18 @@ import {
 	MessageBody,
 	Message,
 	MessageContent,
-	MessageForm,
+	SistemMessage,
 } from './Styles'
+import Form from './Form'
 
-const Chat = ({ socket, username, room }) => {
-	const [currentMessage, setCurrentMessage] = useState('')
+import { StyledButton } from '../../components/Styles'
+
+const Chat = ({ socket, username, room, setShowChat }) => {
 	const [messageList, setMessageList] = useState([])
 
-	const sendMessage = async (e) => {
-		e.preventDefault()
+	const cleanInput = useRef()
 
+	const sendMessage = async ({ currentMessage }) => {
 		if (currentMessage !== '') {
 			const messageData = {
 				room,
@@ -24,15 +26,22 @@ const Chat = ({ socket, username, room }) => {
 				time: new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes()
 			}
 
-			await socket.emit('send_message', messageData)
+			await socket.emit('sendMessage', messageData)
 			setMessageList((list) => [...list, messageData])
 
-			setCurrentMessage('')
+			cleanInput.current.vaciarInput()
+			
 		}
+	}
+
+	const leaveRoom = () => {
+		socket.emit('leaveRoom')
+		setShowChat(false)
 	}
 	
 	useEffect(() => {
-		socket.on('receive_message', (data) => {
+		console.log(`${username} ${room}`)
+		socket.on('receiveMessage', (data) => {
 			setMessageList((list) => [...list, data])
 		})
 	}, [socket])
@@ -40,35 +49,36 @@ const Chat = ({ socket, username, room }) => {
 	return (
 		<StyledChat>
 			<h1>Chat</h1>
-			<MessageBody className='chat-body' >
-				<ScrollToBottom className={'scrollBody'}>
-					{ messageList.map((messageContent, key) => {
-						return (
-							<Message className={messageContent.author === username ? 'own' : '' } key={key} >
-								<div>
-									<MessageContent className='message-content'>
-										<p>{ messageContent.message }</p>
-									</MessageContent>
-									<div className='message-meta'>
-										<p>{ messageContent.time }</p>
-										<p><strong>{ messageContent.author }</strong></p>
-									</div>
-
-								</div>
-							</Message>
-						)
-					})}
-				</ScrollToBottom>
-			</MessageBody>
-			<MessageForm className='chat-footer'>
-				<input
-					type={'text'}
-					placeholder={'Mensaje'}
-					value={currentMessage}
-					onChange={(e) => setCurrentMessage(e.target.value)}
-				/>
-				<button onClick={ sendMessage }>Enviar</button>
-			</MessageForm>
+			<StyledButton onClick={leaveRoom} >Salir</StyledButton>
+			<div className={'Chat'}>
+				<MessageBody className='chat-body' >
+					<ScrollToBottom className={'scrollBody'}>
+						{ messageList.map((messageContent, key) => {
+							return (
+								<Message className={messageContent.author === username ? 'own' : '' } key={key} >
+									{ messageContent.author === 'sistema' ? (
+										<SistemMessage>
+											<p><strong>{ messageContent.message }</strong></p>
+											<div>
+												<p>{ messageContent.time }</p>
+											</div>
+										</SistemMessage>
+									) : (
+										<MessageContent className='message-content'>
+											<p>{ messageContent.message }</p>
+											<div className='message-meta'>
+												<p>{ messageContent.time }</p>
+												<p><strong>{ messageContent.author }</strong></p>
+											</div>
+										</MessageContent>
+									)}
+								</Message>
+							)
+						})}
+					</ScrollToBottom>
+				</MessageBody>
+				<Form sendMessage={sendMessage} ref={cleanInput} />
+			</div>
 		</StyledChat>
 	)
 }

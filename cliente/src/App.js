@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import io from 'socket.io-client'
 import Chat from './pages/Chat'
-import JoinForm from './pages/JoinForm'
+import JoinForm from './pages/Join'
 
 import './App.css'
 
@@ -14,9 +14,9 @@ function App() {
 
 	const joinRoom = (e) => {
 		e.preventDefault()
-		
+
 		if (username !== '' && room !== '') {
-			socket.emit('join_room', room)
+			socket.emit('join', { username, room })
 			setShowChat(true)
 		}
 	}
@@ -34,6 +34,7 @@ function App() {
 					socket={socket}
 					username={username}
 					room={room}
+					setShowChat={setShowChat}
 				/>
 			) }
 
