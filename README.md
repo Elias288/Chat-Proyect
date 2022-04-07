@@ -2,7 +2,7 @@
 
 ## Despliegue web
 
-[frontend](https://624eeb34534efc0d7edbf160--chatclient.netlify.app/)
+[frontend](https://elelichat.netlify.app)
 
 ## Instrucciones de instalación local
 Clonar el repositorio en tu equipo ``` git clone https://github.com/Elias288/Chat-Proyect.git ```
