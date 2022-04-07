@@ -40,7 +40,7 @@ const Chat = ({ socket, username, room, setShowChat }) => {
 	}
 	
 	useEffect(() => {
-		console.log(`${username} ${room}`)
+		// console.log(`${username} ${room}`)
 		socket.on('receiveMessage', (data) => {
 			setMessageList((list) => [...list, data])
 		})

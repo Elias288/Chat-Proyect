@@ -12,7 +12,8 @@ app.use(cors())
 
 const io = new Server(server, {
 	cors: {
-		origin: 'https://624eeb34534efc0d7edbf160--chatclient.netlify.app/',
+		origin: 'https://624eeb34534efc0d7edbf160--chatclient.netlify.app',
+		// origin: 'http://localhost:3000',
 		methods: ['GET', 'POST']
 	}
 })
@@ -60,14 +61,17 @@ io.on('connection', (socket) => {
 		console.log('Usuario desconectado: ' + socket.id)
 		const user = getUser(socket.id)
 
-		const messageData = {
-			room: user.room,
-			author: 'sistema',
-			message: `${user.name} a salido`,
-			time: new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes()
+		if (user) {
+			const messageData = {
+				room: user.room,
+				author: 'sistema',
+				message: `${user.name} a salido`,
+				time: new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes()
+			}
+			socket.to(user.room).emit('receiveMessage', messageData)
 		}
-		socket.to(user.room).emit('receiveMessage', messageData)
-		removeUser(user.id)
+
+		removeUser(socket.id)
 	})
 })
 
