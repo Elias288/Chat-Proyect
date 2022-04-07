@@ -5,3 +5,6 @@ Server/.env.local
 Server/.env.development.local
 Server/.env.test.local
 Server/.env.production.local
+
+# Local Netlify folder
+.netlify
