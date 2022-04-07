@@ -10,12 +10,17 @@ const { addUser, removeUser, getUsersInRoom, getUser } = require('./utils/users'
 const server = http.createServer(app)
 app.use(cors())
 
+const whiteList = ['*', 'localhost:3000']
+
 const io = new Server(server, {
 	cors: {
-		origin: 'https://624eeb34534efc0d7edbf160--chatclient.netlify.app',
-		// origin: 'http://localhost:3000',
+		origin: whiteList,
 		methods: ['GET', 'POST']
 	}
+})
+
+app.get('/', (req, res) => {
+	res.send('<h1>Hello world</h1>')
 })
 
 io.on('connection', (socket) => {
