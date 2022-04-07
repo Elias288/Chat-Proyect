@@ -7,11 +7,13 @@ const { Server } = require('socket.io')
 
 const { addUser, removeUser, getUsersInRoom, getUser } = require('./utils/users')
 
+const port = process.env.PORT || 3001
+
 app.use(cors())
 
 const server = http.createServer(app)
 
-const whiteList = '*'
+const whiteList = 'https://elelichat.netlify.app'
 const io = new Server(server, {
 	cors: {
 		origin: whiteList,
@@ -20,7 +22,7 @@ const io = new Server(server, {
 })
 
 io.on('connection', (socket) => {
-	console.log('Usuario conectado: ' + socket.id)
+	// console.log('Usuario conectado: ' + socket.id)
 
 	socket.on('join', (data) => {
 		const { user } = addUser({
@@ -59,7 +61,7 @@ io.on('connection', (socket) => {
 	})
 
 	socket.on('disconnect', () => {
-		console.log('Usuario desconectado: ' + socket.id)
+		// console.log('Usuario desconectado: ' + socket.id)
 		const user = getUser(socket.id)
 
 		if (user) {
@@ -76,6 +78,6 @@ io.on('connection', (socket) => {
 	})
 })
 
-server.listen(3001, () => {
-	console.log('escuchando en *:3001')
+server.listen(port, () => {
+	console.log(`escuchando en *${port}`)
 })
