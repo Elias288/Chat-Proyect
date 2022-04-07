@@ -6,7 +6,7 @@ import JoinForm from './pages/Join'
 import './App.css'
 
 // const socket = io.connect('http://localhost:3001')
-const socket = io.connect('https://eleli-chat-server.herokuapp.com/')
+const socket = io.connect('https://eleli-chat-server.herokuapp.com')
 
 function App() {
 	const [username, setUsername] = useState('')
