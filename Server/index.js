@@ -29,31 +29,40 @@ io.on('connection', (socket) => {
 			id: socket.id, name: data.username, room: data.room
 		})
 
-		const messageData = {
-			room: data.room,
-			author: 'sistema',
-			message: `${user.name} se ha unido`,
-			time: new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes()
+		if (user) {
+			const messageData = {
+				room: data.room,
+				author: 'sistema',
+				message: `${user.name} se ha unido`,
+				time: new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes()
+			}
+			socket.broadcast.to(user.room).emit('receiveMessage', messageData)
+
+			socket.broadcast.to(user.room).emit('UserList', getUsersInRoom(user.room))
+
+			socket.join(user.room)
+			console.log(`Usuario: ${user.name}: ${user.id} se unio al room: ${user.room}`)
+		} else {
+			console.log('Error de usuario')
+			removeUser(socket.id)
 		}
-		socket.broadcast.to(user.room).emit('receiveMessage', messageData)
-
-		socket.broadcast.to(user.room).emit('UserList', getUsersInRoom(user.room))
-
-		socket.join(user.room)
-		console.log(`Usuario: ${user.name}: ${user.id} se unio al room: ${user.room}`)
 	})
 
 	socket.on('leaveRoom', () => {
 		const user = getUser(socket.id)
 
-		const messageData = {
-			room: user.room,
-			author: 'sistema',
-			message: `${user.name} a salido`,
-			time: new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes()
+		if (user) {
+			const messageData = {
+				room: user.room,
+				author: 'sistema',
+				message: `${user.name} a salido`,
+				time: new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes()
+			}
+			socket.to(user.room).emit('receiveMessage', messageData)
+			removeUser(user.id)
+		} else {
+			console.log('Error de usuario')
 		}
-		socket.to(user.room).emit('receiveMessage', messageData)
-		removeUser(user.id)
 	})
 
 	socket.on('sendMessage', (data) => {
@@ -72,6 +81,8 @@ io.on('connection', (socket) => {
 				time: new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes()
 			}
 			socket.to(user.room).emit('receiveMessage', messageData)
+		} else {
+			console.log('Error de usuario')
 		}
 
 		removeUser(socket.id)
