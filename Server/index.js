@@ -7,20 +7,16 @@ const { Server } = require('socket.io')
 
 const { addUser, removeUser, getUsersInRoom, getUser } = require('./utils/users')
 
-const server = http.createServer(app)
 app.use(cors())
 
-const whiteList = ['*', 'localhost:3000']
+const server = http.createServer(app)
 
+const whiteList = '*'
 const io = new Server(server, {
 	cors: {
 		origin: whiteList,
 		methods: ['GET', 'POST']
 	}
-})
-
-app.get('/', (req, res) => {
-	res.send('<h1>Hello world</h1>')
 })
 
 io.on('connection', (socket) => {
